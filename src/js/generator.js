@@ -27,6 +27,7 @@ const DEFAULTS = {
   port: '',
   workDir: '/app',
   startCmd: '',
+  volume: '',
   multiStage: true,
   alpine: true,
   nonRoot: true,

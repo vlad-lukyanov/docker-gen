@@ -121,6 +121,22 @@ describe('generator', () => {
     expect(result).toContain('LABEL maintainer=docker-gen@example.com');
   });
 
+  it('should include VOLUME instructions', () => {
+    const result = generateDockerfile({
+      language: 'node',
+      volume: '/data',
+    });
+    expect(result).toContain('VOLUME /data');
+  });
+
+  it('should support multiple VOLUME paths', () => {
+    const result = generateDockerfile({
+      language: 'node',
+      volume: ['/data', '/cache'],
+    });
+    expect(result).toContain('VOLUME /data /cache');
+  });
+
   it('should use custom start command', () => {
     const result = generateDockerfile({
       language: 'node',

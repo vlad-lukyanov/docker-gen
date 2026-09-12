@@ -1,4 +1,4 @@
-import { buildBaseImage, envBlock, healthcheck, labelBlock } from './helpers.js';
+import { buildBaseImage, envBlock, healthcheck, labelBlock, volumeBlock } from './helpers.js';
 
 export function rustTemplate(cfg) {
   const lines = [];
@@ -38,6 +38,11 @@ export function rustTemplate(cfg) {
   if ((cfg.labels || []).length > 0) {
     lines.push('');
     lines.push(labelBlock(cfg.labels));
+  }
+
+  if (cfg.volume) {
+    lines.push('');
+    lines.push(volumeBlock(cfg.volume));
   }
 
   if (cfg.nonRoot && cfg.alpine) {

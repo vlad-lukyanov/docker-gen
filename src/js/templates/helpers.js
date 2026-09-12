@@ -20,6 +20,21 @@ export function labelBlock(labels) {
   return labels.map((v) => `LABEL ${v.key}=${v.value}`).join('\n');
 }
 
+export function volumeBlock(volume) {
+  if (!volume) return '';
+
+  const volumes = Array.isArray(volume)
+    ? volume
+    : String(volume)
+        .split(',')
+        .map((v) => v.trim())
+        .filter(Boolean);
+
+  if (volumes.length === 0) return '';
+
+  return `VOLUME ${volumes.join(' ')}`;
+}
+
 export function healthcheck(port, path) {
   return [
     'HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3',

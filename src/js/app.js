@@ -66,6 +66,11 @@ class ConfigPanel extends HTMLElement {
       this._sync();
     });
 
+    this.querySelector('#volume').addEventListener('input', (e) => {
+      this._config.volume = e.target.value;
+      this._sync();
+    });
+
     this.querySelector('#multi-stage').addEventListener('change', (e) => {
       this._config.multiStage = e.target.checked;
       this._sync();
@@ -237,6 +242,10 @@ class ConfigPanel extends HTMLElement {
           <div class="form-group">
             <label class="form-label" for="start-cmd">Start Command</label>
             <input type="text" id="start-cmd" class="form-input" placeholder="Auto-detect">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="volume">Volume</label>
+            <input type="text" id="volume" class="form-input" placeholder="e.g., /data, /cache">
           </div>
         </div>
 
