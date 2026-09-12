@@ -91,6 +91,12 @@ class ConfigPanel extends HTMLElement {
       this._renderEnvVars();
       this._sync();
     });
+
+    this.querySelector('#add-label').addEventListener('click', () => {
+      this._config.labels.push({ key: '', value: '' });
+      this._renderLabels();
+      this._sync();
+    });
   }
 
   _renderEnvVars() {
@@ -121,6 +127,39 @@ class ConfigPanel extends HTMLElement {
         const idx = parseInt(e.target.dataset.index);
         this._config.envVars.splice(idx, 1);
         this._renderEnvVars();
+        this._sync();
+      });
+    });
+  }
+
+  _renderLabels() {
+    const container = this.querySelector('#label-list');
+    container.innerHTML = this._config.labels
+      .map(
+        (_, i) => `
+      <div class="env-row" data-index="${i}">
+        <input type="text" class="form-input" placeholder="KEY" value="${this._config.labels[i].key}" data-field="key" data-index="${i}">
+        <input type="text" class="form-input" placeholder="value" value="${this._config.labels[i].value}" data-field="value" data-index="${i}">
+        <button class="btn-remove-env" data-index="${i}" aria-label="Remove">×</button>
+      </div>
+    `,
+      )
+      .join('');
+
+    container.querySelectorAll('.form-input').forEach((input) => {
+      input.addEventListener('input', (e) => {
+        const idx = parseInt(e.target.dataset.index);
+        const field = e.target.dataset.field;
+        this._config.labels[idx][field] = e.target.value;
+        this._sync();
+      });
+    });
+
+    container.querySelectorAll('.btn-remove-env').forEach((btn) => {
+      btn.addEventListener('click', (e) => {
+        const idx = parseInt(e.target.dataset.index);
+        this._config.labels.splice(idx, 1);
+        this._renderLabels();
         this._sync();
       });
     });
@@ -207,6 +246,14 @@ class ConfigPanel extends HTMLElement {
           <div class="panel-section-title">Environment Variables</div>
           <div id="env-list" class="env-list"></div>
           <button id="add-env" class="btn-add-env">+ Add variable</button>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="panel-section">
+          <div class="panel-section-title">Labels</div>
+          <div id="label-list" class="env-list"></div>
+          <button id="add-label" class="btn-add-env">+ Add label</button>
         </div>
       </div>
     `;

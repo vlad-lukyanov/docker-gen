@@ -1,4 +1,4 @@
-import { buildBaseImage, envBlock, healthcheck } from './helpers.js';
+import { buildBaseImage, envBlock, healthcheck, labelBlock } from './helpers.js';
 
 export function scalaTemplate(cfg) {
   const lines = [];
@@ -24,6 +24,11 @@ export function scalaTemplate(cfg) {
   if (cfg.envVars.length > 0) {
     lines.push('');
     lines.push(envBlock(cfg.envVars));
+  }
+
+  if ((cfg.labels || []).length > 0) {
+    lines.push('');
+    lines.push(labelBlock(cfg.labels));
   }
 
   if (cfg.nonRoot) {

@@ -15,6 +15,11 @@ export function envBlock(vars) {
   return vars.map((v) => `ENV ${v.key}=${v.value}`).join('\n');
 }
 
+export function labelBlock(labels) {
+  if (!labels || labels.length === 0) return '';
+  return labels.map((v) => `LABEL ${v.key}=${v.value}`).join('\n');
+}
+
 export function healthcheck(port, path) {
   return [
     'HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3',

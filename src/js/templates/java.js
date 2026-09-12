@@ -1,4 +1,4 @@
-import { buildBaseImage, envBlock, healthcheck } from './helpers.js';
+import { buildBaseImage, envBlock, healthcheck, labelBlock } from './helpers.js';
 
 export function javaTemplate(cfg) {
   const lines = [];
@@ -33,6 +33,11 @@ export function javaTemplate(cfg) {
   if (cfg.envVars.length > 0) {
     lines.push('');
     lines.push(envBlock(cfg.envVars));
+  }
+
+  if ((cfg.labels || []).length > 0) {
+    lines.push('');
+    lines.push(labelBlock(cfg.labels));
   }
 
   if (cfg.nonRoot) {

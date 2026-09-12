@@ -113,6 +113,14 @@ describe('generator', () => {
     expect(result).toContain('ENV NODE_ENV=production');
   });
 
+  it('should include LABEL instructions', () => {
+    const result = generateDockerfile({
+      language: 'node',
+      labels: [{ key: 'maintainer', value: 'docker-gen@example.com' }],
+    });
+    expect(result).toContain('LABEL maintainer=docker-gen@example.com');
+  });
+
   it('should use custom start command', () => {
     const result = generateDockerfile({
       language: 'node',

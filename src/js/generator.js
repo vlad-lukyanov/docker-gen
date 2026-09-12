@@ -32,6 +32,7 @@ const DEFAULTS = {
   nonRoot: true,
   healthcheck: false,
   envVars: [],
+  labels: [],
 };
 
 export function getConfig(config) {
