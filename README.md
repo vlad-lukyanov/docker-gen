@@ -39,7 +39,7 @@ npm run lint         # Lint code
 
 ## Deployment
 
-Automatically deployed to GitHub Pages on push to `main` via GitHub Actions.
+Automatically deployed to GitHub Pages on push to `master` via GitHub Actions.
 
 ## Tech Stack
 
