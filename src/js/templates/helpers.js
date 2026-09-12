@@ -1,7 +1,12 @@
-export function buildBaseImage(name, tag) {
+export function buildBaseImage(name, tag, baseImage = '') {
+  if (baseImage) {
+    return baseImage;
+  }
+
   if (tag) {
     return name + ':' + tag;
   }
+
   return name + ':latest';
 }
 

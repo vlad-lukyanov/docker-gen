@@ -6,7 +6,7 @@ export function bunTemplate(cfg) {
 
   if (cfg.multiStage) {
     lines.push('# Build stage');
-    lines.push(`FROM ${buildBaseImage('oven/bun', tag)} AS builder`);
+    lines.push(`FROM ${buildBaseImage('oven/bun', tag, cfg.baseImage)} AS builder`);
     lines.push('WORKDIR /app');
     lines.push('');
     lines.push('COPY package.json bun.lockb* ./');
@@ -16,9 +16,9 @@ export function bunTemplate(cfg) {
     lines.push('RUN bun run build');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${cfg.alpine ? 'oven/bun:1-alpine' : 'oven/bun:1'}`);
+    lines.push(`FROM ${cfg.baseImage || (cfg.alpine ? 'oven/bun:1-alpine' : 'oven/bun:1')}`);
   } else {
-    lines.push(`FROM ${buildBaseImage('oven/bun', tag)}`);
+    lines.push(`FROM ${buildBaseImage('oven/bun', tag, cfg.baseImage)}`);
   }
 
   lines.push('');

@@ -58,6 +58,11 @@ describe('generator', () => {
     expect(result).toContain('Error');
   });
 
+  it('should respect custom base image', () => {
+    const result = generateDockerfile({ language: 'node', baseImage: 'registry.example.com/my-node:1.2.3' });
+    expect(result).toContain('FROM registry.example.com/my-node:1.2.3');
+  });
+
   it('should include EXPOSE when port is set', () => {
     const result = generateDockerfile({ language: 'node', port: '3000' });
     expect(result).toContain('EXPOSE 3000');

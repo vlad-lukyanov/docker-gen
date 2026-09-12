@@ -6,7 +6,7 @@ export function fastapiTemplate(cfg) {
 
   if (cfg.multiStage) {
     lines.push('# Build stage');
-    lines.push(`FROM ${buildBaseImage('python', tag)} AS builder`);
+    lines.push(`FROM ${buildBaseImage('python', tag, cfg.baseImage)} AS builder`);
     lines.push('WORKDIR /app');
     lines.push('');
     lines.push('COPY requirements.txt .');
@@ -15,9 +15,9 @@ export function fastapiTemplate(cfg) {
     lines.push('COPY . .');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${buildBaseImage('python', tag)}`);
+    lines.push(`FROM ${buildBaseImage('python', tag, cfg.baseImage)}`);
   } else {
-    lines.push(`FROM ${buildBaseImage('python', tag)}`);
+    lines.push(`FROM ${buildBaseImage('python', tag, cfg.baseImage)}`);
   }
 
   lines.push('');

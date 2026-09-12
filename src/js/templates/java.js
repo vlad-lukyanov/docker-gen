@@ -6,7 +6,7 @@ export function javaTemplate(cfg) {
   if (cfg.multiStage) {
     lines.push('# Build stage');
     lines.push(
-      `FROM ${buildBaseImage('eclipse-temurin', '17-' + (cfg.alpine ? 'alpine' : 'jammy'))} AS builder`,
+      `FROM ${buildBaseImage('eclipse-temurin', '17-' + (cfg.alpine ? 'alpine' : 'jammy'), cfg.baseImage)} AS builder`,
     );
     lines.push('WORKDIR /app');
     lines.push('');
@@ -19,11 +19,11 @@ export function javaTemplate(cfg) {
     lines.push('');
     lines.push('# Production stage');
     lines.push(
-      `FROM ${buildBaseImage('eclipse-temurin', '17-' + (cfg.alpine ? 'alpine' : 'jammy'))}`,
+      `FROM ${buildBaseImage('eclipse-temurin', '17-' + (cfg.alpine ? 'alpine' : 'jammy'), cfg.baseImage)}`,
     );
   } else {
     lines.push(
-      `FROM ${buildBaseImage('eclipse-temurin', '17-' + (cfg.alpine ? 'alpine' : 'jammy'))}`,
+      `FROM ${buildBaseImage('eclipse-temurin', '17-' + (cfg.alpine ? 'alpine' : 'jammy'), cfg.baseImage)}`,
     );
   }
 

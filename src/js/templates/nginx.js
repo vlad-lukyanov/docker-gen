@@ -4,7 +4,7 @@ export function nginxTemplate(cfg) {
   const lines = [];
   const tag = cfg.alpine ? 'alpine' : '';
 
-  lines.push(`FROM ${buildBaseImage('nginx', tag)}`);
+  lines.push(`FROM ${buildBaseImage('nginx', tag, cfg.baseImage)}`);
   lines.push('');
   lines.push('WORKDIR ' + cfg.workDir);
 

@@ -6,7 +6,7 @@ export function golangTemplate(cfg) {
 
   if (cfg.multiStage) {
     lines.push('# Build stage');
-    lines.push(`FROM ${buildBaseImage('golang', tag)} AS builder`);
+    lines.push(`FROM ${buildBaseImage('golang', tag, cfg.baseImage)} AS builder`);
     lines.push('WORKDIR /app');
     lines.push('');
     lines.push('COPY go.mod go.sum ./');
@@ -16,11 +16,11 @@ export function golangTemplate(cfg) {
     lines.push('RUN CGO_ENABLED=0 GOOS=linux go build -o /app/server .');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${cfg.alpine ? 'alpine:latest' : 'gcr.io/distroless/static-debian12'}`);
+    lines.push(`FROM ${cfg.baseImage || (cfg.alpine ? 'alpine:latest' : 'gcr.io/distroless/static-debian12')}`);
     lines.push('');
     lines.push('WORKDIR ' + cfg.workDir);
   } else {
-    lines.push(`FROM ${buildBaseImage('golang', tag)}`);
+    lines.push(`FROM ${buildBaseImage('golang', tag, cfg.baseImage)}`);
     lines.push('');
     lines.push('WORKDIR ' + cfg.workDir);
   }

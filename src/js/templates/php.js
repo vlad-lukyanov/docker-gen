@@ -4,7 +4,7 @@ export function phpTemplate(cfg) {
   const lines = [];
   const tag = cfg.alpine ? 'alpine' : '';
 
-  lines.push(`FROM ${buildBaseImage('php', tag)}`);
+  lines.push(`FROM ${buildBaseImage('php', tag, cfg.baseImage)}`);
   lines.push('');
   lines.push('WORKDIR ' + cfg.workDir);
 

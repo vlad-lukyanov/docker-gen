@@ -6,7 +6,7 @@ export function rustTemplate(cfg) {
 
   if (cfg.multiStage) {
     lines.push('# Build stage');
-    lines.push(`FROM ${buildBaseImage('rust', tag)} AS builder`);
+    lines.push(`FROM ${buildBaseImage('rust', tag, cfg.baseImage)} AS builder`);
     lines.push('WORKDIR /app');
     lines.push('');
     lines.push('COPY Cargo.toml Cargo.lock ./');
@@ -18,14 +18,14 @@ export function rustTemplate(cfg) {
     lines.push('RUN touch src/main.rs && cargo build --release');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${cfg.alpine ? 'alpine:latest' : 'debian:bookworm-slim'}`);
+    lines.push(`FROM ${cfg.baseImage || (cfg.alpine ? 'alpine:latest' : 'debian:bookworm-slim')}`);
     if (cfg.alpine) {
       lines.push('RUN apk add --no-cache ca-certificates');
     }
     lines.push('');
     lines.push('WORKDIR ' + cfg.workDir);
   } else {
-    lines.push(`FROM ${buildBaseImage('rust', tag)}`);
+    lines.push(`FROM ${buildBaseImage('rust', tag, cfg.baseImage)}`);
     lines.push('');
     lines.push('WORKDIR ' + cfg.workDir);
   }

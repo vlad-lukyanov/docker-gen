@@ -6,7 +6,7 @@ export function elixirTemplate(cfg) {
 
   if (cfg.multiStage) {
     lines.push('# Build stage');
-    lines.push(`FROM ${buildBaseImage('elixir', tag)} AS builder`);
+    lines.push(`FROM ${buildBaseImage('elixir', tag, cfg.baseImage)} AS builder`);
     lines.push('WORKDIR /app');
     lines.push('');
     lines.push('COPY mix.exs mix.lock ./');
@@ -16,9 +16,9 @@ export function elixirTemplate(cfg) {
     lines.push('RUN MIX_ENV=prod mix release');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${cfg.alpine ? 'alpine:latest' : 'debian:bookworm-slim'}`);
+    lines.push(`FROM ${cfg.baseImage || (cfg.alpine ? 'alpine:latest' : 'debian:bookworm-slim')}`);
   } else {
-    lines.push(`FROM ${buildBaseImage('elixir', tag)}`);
+    lines.push(`FROM ${buildBaseImage('elixir', tag, cfg.baseImage)}`);
   }
 
   lines.push('');

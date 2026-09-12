@@ -5,7 +5,7 @@ export function reactTemplate(cfg) {
 
   if (cfg.multiStage) {
     lines.push('# Build stage');
-    lines.push(`FROM ${buildBaseImage('node', cfg.alpine ? 'alpine' : '')} AS builder`);
+    lines.push(`FROM ${buildBaseImage('node', cfg.alpine ? 'alpine' : '', cfg.baseImage)} AS builder`);
     lines.push('WORKDIR /app');
     lines.push('');
     lines.push('COPY package*.json ./');
@@ -15,9 +15,9 @@ export function reactTemplate(cfg) {
     lines.push('RUN npm run build');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${buildBaseImage('nginx', cfg.alpine ? 'alpine' : '')}`);
+    lines.push(`FROM ${buildBaseImage('nginx', cfg.alpine ? 'alpine' : '', cfg.baseImage)}`);
   } else {
-    lines.push(`FROM ${buildBaseImage('node', cfg.alpine ? 'alpine' : '')}`);
+    lines.push(`FROM ${buildBaseImage('node', cfg.alpine ? 'alpine' : '', cfg.baseImage)}`);
   }
 
   lines.push('');

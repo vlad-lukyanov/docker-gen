@@ -6,7 +6,7 @@ export function rubyTemplate(cfg) {
 
   if (cfg.multiStage) {
     lines.push('# Build stage');
-    lines.push(`FROM ${buildBaseImage('ruby', tag)} AS builder`);
+    lines.push(`FROM ${buildBaseImage('ruby', tag, cfg.baseImage)} AS builder`);
     lines.push('WORKDIR /app');
     lines.push('');
     lines.push('COPY Gemfile Gemfile.lock ./');
@@ -15,9 +15,9 @@ export function rubyTemplate(cfg) {
     lines.push('COPY . .');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${buildBaseImage('ruby', tag)}`);
+    lines.push(`FROM ${buildBaseImage('ruby', tag, cfg.baseImage)}`);
   } else {
-    lines.push(`FROM ${buildBaseImage('ruby', tag)}`);
+    lines.push(`FROM ${buildBaseImage('ruby', tag, cfg.baseImage)}`);
   }
 
   lines.push('');

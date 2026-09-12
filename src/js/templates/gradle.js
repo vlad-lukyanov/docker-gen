@@ -6,16 +6,16 @@ export function gradleTemplate(cfg) {
 
   if (cfg.multiStage) {
     lines.push('# Build stage');
-    lines.push(`FROM ${buildBaseImage('gradle', tag)} AS builder`);
+    lines.push(`FROM ${buildBaseImage('gradle', tag, cfg.baseImage)} AS builder`);
     lines.push('WORKDIR /app');
     lines.push('');
     lines.push('COPY . .');
     lines.push('RUN gradle build');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${buildBaseImage('eclipse-temurin', tag)}`);
+    lines.push(`FROM ${buildBaseImage('eclipse-temurin', tag, cfg.baseImage)}`);
   } else {
-    lines.push(`FROM ${buildBaseImage('gradle', tag)}`);
+    lines.push(`FROM ${buildBaseImage('gradle', tag, cfg.baseImage)}`);
   }
 
   lines.push('');
