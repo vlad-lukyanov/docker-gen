@@ -1,5 +1,8 @@
 # 🐳 Dockerfile Generator
 
+[![Build Status](https://github.com/vlad-lukyanov/docker-gen/actions/workflows/deploy.yml/badge.svg)](https://github.com/vlad-lukyanov/docker-gen/actions/workflows/deploy.yml)
+[![GitHub Pages](https://img.shields.io/badge/GitHub%20Pages-Live%20Demo-222222?logo=githubpages)](https://vlad-lukyanov.github.io/docker-gen/)
+
 Generate production-ready Dockerfiles with best practices. Zero runtime dependencies.
 
 ## Features
