@@ -7,6 +7,18 @@ export const LANGUAGES = {
   rust: { name: 'Rust', icon: '🦀' },
   java: { name: 'Java', icon: '☕' },
   php: { name: 'PHP', icon: '🐘' },
+  bun: { name: 'Bun', icon: '🍞' },
+  deno: { name: 'Deno', icon: '🦕' },
+  ruby: { name: 'Ruby', icon: '💎' },
+  dotnet: { name: '.NET', icon: '⚙️' },
+  nginx: { name: 'Nginx', icon: '🌐' },
+  kotlin: { name: 'Kotlin', icon: '🧩' },
+  elixir: { name: 'Elixir', icon: '💧' },
+  scala: { name: 'Scala', icon: '🔺' },
+  gradle: { name: 'Gradle', icon: '🧰' },
+  fastapi: { name: 'FastAPI', icon: '⚡' },
+  laravel: { name: 'Laravel', icon: '🪐' },
+  react: { name: 'React', icon: '⚛️' },
 };
 
 const DEFAULTS = {

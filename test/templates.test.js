@@ -5,6 +5,11 @@ import { golangTemplate } from '../src/js/templates/golang.js';
 import { rustTemplate } from '../src/js/templates/rust.js';
 import { javaTemplate } from '../src/js/templates/java.js';
 import { phpTemplate } from '../src/js/templates/php.js';
+import { bunTemplate } from '../src/js/templates/bun.js';
+import { denoTemplate } from '../src/js/templates/deno.js';
+import { rubyTemplate } from '../src/js/templates/ruby.js';
+import { dotnetTemplate } from '../src/js/templates/dotnet.js';
+import { nginxTemplate } from '../src/js/templates/nginx.js';
 
 const baseCfg = {
   baseImage: '',
@@ -120,6 +125,49 @@ describe('php template', () => {
   it('should install php extensions', () => {
     const result = phpTemplate(baseCfg);
     expect(result).toContain('docker-php-ext-install');
+  });
+});
+
+describe('bun template', () => {
+  it('should generate multi-stage build with bun runtime', () => {
+    const result = bunTemplate(baseCfg);
+    expect(result).toContain('FROM oven/bun:1-alpine AS builder');
+    expect(result).toContain('RUN bun install --frozen-lockfile');
+    expect(result).toContain('CMD ["bun run start"]');
+  });
+});
+
+describe('deno template', () => {
+  it('should generate deno Dockerfile', () => {
+    const result = denoTemplate(baseCfg);
+    expect(result).toContain('FROM denoland/deno:alpine');
+    expect(result).toContain('deno run');
+  });
+});
+
+describe('ruby template', () => {
+  it('should generate ruby Dockerfile', () => {
+    const result = rubyTemplate(baseCfg);
+    expect(result).toContain('FROM ruby:alpine');
+    expect(result).toContain('bundle install');
+    expect(result).toContain('bundle exec rails server');
+  });
+});
+
+describe('dotnet template', () => {
+  it('should generate dotnet Dockerfile', () => {
+    const result = dotnetTemplate(baseCfg);
+    expect(result).toContain('FROM mcr.microsoft.com/dotnet/sdk:8.0-alpine AS builder');
+    expect(result).toContain('dotnet publish');
+    expect(result).toContain('dotnet app.dll');
+  });
+});
+
+describe('nginx template', () => {
+  it('should generate nginx Dockerfile', () => {
+    const result = nginxTemplate(baseCfg);
+    expect(result).toContain('FROM nginx:alpine');
+    expect(result).toContain('nginx -g');
   });
 });
 

@@ -1,50 +1,46 @@
 import { buildBaseImage, envBlock, healthcheck } from './helpers.js';
 
-export function golangTemplate(cfg) {
+export function gradleTemplate(cfg) {
   const lines = [];
-  const tag = cfg.alpine ? 'alpine' : '';
+  const tag = cfg.alpine ? '21-alpine' : '21';
 
   if (cfg.multiStage) {
     lines.push('# Build stage');
-    lines.push(`FROM ${buildBaseImage('golang', tag)} AS builder`);
+    lines.push(`FROM ${buildBaseImage('gradle', tag)} AS builder`);
     lines.push('WORKDIR /app');
     lines.push('');
-    lines.push('COPY go.mod go.sum ./');
-    lines.push('RUN go mod download');
-    lines.push('');
     lines.push('COPY . .');
-    lines.push('RUN CGO_ENABLED=0 GOOS=linux go build -o /app/server .');
+    lines.push('RUN gradle build');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${cfg.alpine ? 'alpine:latest' : 'gcr.io/distroless/static-debian12'}`);
-    lines.push('');
-    lines.push('WORKDIR ' + cfg.workDir);
+    lines.push(`FROM ${buildBaseImage('eclipse-temurin', tag)}`);
   } else {
-    lines.push(`FROM ${buildBaseImage('golang', tag)}`);
-    lines.push('');
-    lines.push('WORKDIR ' + cfg.workDir);
+    lines.push(`FROM ${buildBaseImage('gradle', tag)}`);
   }
+
+  lines.push('');
+  lines.push('WORKDIR ' + cfg.workDir);
 
   if (cfg.envVars.length > 0) {
     lines.push('');
     lines.push(envBlock(cfg.envVars));
   }
-  
+
   if (cfg.nonRoot) {
     lines.push('');
-    lines.push('RUN addgroup -S appgroup && adduser -S appuser -G appgroup');
+    if (cfg.alpine) {
+      lines.push('RUN addgroup -S appgroup && adduser -S appuser -G appgroup');
+    } else {
+      lines.push('RUN groupadd -r appgroup && useradd -r -g appgroup appuser');
+    }
   }
 
   if (cfg.multiStage) {
     lines.push('');
-    lines.push('COPY --from=builder /app/server .');
+    lines.push('COPY --from=builder /app/build/libs/*.jar app.jar');
   } else {
     lines.push('');
     lines.push('COPY . .');
-    if (!cfg.multiStage) {
-      lines.push('');
-      lines.push('RUN go build -o server .');
-    }
   }
 
   if (cfg.port) {
@@ -62,7 +58,7 @@ export function golangTemplate(cfg) {
     lines.push('USER appuser');
   }
 
-  const cmd = cfg.startCmd || './server';
+  const cmd = cfg.startCmd || 'java -jar app.jar';
   lines.push('');
   lines.push('CMD [' + JSON.stringify(cmd) + ']');
 

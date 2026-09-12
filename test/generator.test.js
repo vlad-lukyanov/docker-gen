@@ -2,9 +2,28 @@ import { describe, it, expect } from 'vitest';
 import { generateDockerfile, getConfig, LANGUAGES } from '../src/js/generator.js';
 
 describe('generator', () => {
-  it('should export all 6 languages', () => {
+  it('should export all 18 languages', () => {
     const keys = Object.keys(LANGUAGES);
-    expect(keys).toEqual(['node', 'python', 'golang', 'rust', 'java', 'php']);
+    expect(keys).toEqual([
+      'node',
+      'python',
+      'golang',
+      'rust',
+      'java',
+      'php',
+      'bun',
+      'deno',
+      'ruby',
+      'dotnet',
+      'nginx',
+      'kotlin',
+      'elixir',
+      'scala',
+      'gradle',
+      'fastapi',
+      'laravel',
+      'react',
+    ]);
   });
 
   it('should return default config', () => {
