@@ -56,7 +56,7 @@ export function phpTemplate(cfg) {
     lines.push('USER appuser');
   }
 
-  const cmd = cfg.startCmd || 'php -S 0.0.0.0:80';
+  const cmd = cfg.startCmd || 'php -S 0.0.0.0:' + (cfg.port || '80');
   lines.push('');
   lines.push('CMD [' + JSON.stringify(cmd) + ']');
 

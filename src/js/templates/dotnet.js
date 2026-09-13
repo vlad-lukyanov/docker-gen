@@ -6,7 +6,9 @@ export function dotnetTemplate(cfg) {
 
   if (cfg.multiStage) {
     lines.push('# Build stage');
-    lines.push(`FROM ${buildBaseImage('mcr.microsoft.com/dotnet/sdk', sdkTag, cfg.baseImage)} AS builder`);
+    lines.push(
+      `FROM ${buildBaseImage('mcr.microsoft.com/dotnet/sdk', sdkTag, cfg.baseImage)} AS builder`,
+    );
     lines.push('WORKDIR /src');
     lines.push('');
     lines.push('COPY . .');
@@ -14,7 +16,9 @@ export function dotnetTemplate(cfg) {
     lines.push('RUN dotnet publish -c Release -o /app/publish');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${cfg.baseImage || (cfg.alpine ? 'mcr.microsoft.com/dotnet/aspnet:8.0-alpine' : 'mcr.microsoft.com/dotnet/aspnet:8.0')}`);
+    lines.push(
+      `FROM ${cfg.baseImage || (cfg.alpine ? 'mcr.microsoft.com/dotnet/aspnet:8.0-alpine' : 'mcr.microsoft.com/dotnet/aspnet:8.0')}`,
+    );
   } else {
     lines.push(`FROM ${buildBaseImage('mcr.microsoft.com/dotnet/aspnet', sdkTag, cfg.baseImage)}`);
   }

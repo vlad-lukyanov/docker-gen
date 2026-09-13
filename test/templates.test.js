@@ -10,17 +10,21 @@ import { denoTemplate } from '../src/js/templates/deno.js';
 import { rubyTemplate } from '../src/js/templates/ruby.js';
 import { dotnetTemplate } from '../src/js/templates/dotnet.js';
 import { nginxTemplate } from '../src/js/templates/nginx.js';
+import { fastapiTemplate } from '../src/js/templates/fastapi.js';
+import { laravelTemplate } from '../src/js/templates/laravel.js';
 
 const baseCfg = {
   baseImage: '',
   port: '',
   workDir: '/app',
   startCmd: '',
+  volume: '',
   multiStage: true,
   alpine: true,
   nonRoot: true,
   healthcheck: false,
   envVars: [],
+  labels: [],
 };
 
 describe('node template', () => {
@@ -126,6 +130,16 @@ describe('php template', () => {
     const result = phpTemplate(baseCfg);
     expect(result).toContain('docker-php-ext-install');
   });
+
+  it('should use cfg.port in CMD', () => {
+    const result = phpTemplate({ ...baseCfg, port: '9000' });
+    expect(result).toContain('php -S 0.0.0.0:9000');
+  });
+
+  it('should fallback to port 80 in CMD when no port set', () => {
+    const result = phpTemplate(baseCfg);
+    expect(result).toContain('php -S 0.0.0.0:80');
+  });
 });
 
 describe('bun template', () => {
@@ -188,5 +202,28 @@ describe('helpers', () => {
   it('should generate healthcheck with custom port', () => {
     const result = nodeTemplate({ ...baseCfg, healthcheck: true, port: '4000' });
     expect(result).toContain('localhost:4000');
+  });
+
+  it('should include labels when provided', () => {
+    const result = nodeTemplate({
+      ...baseCfg,
+      labels: [{ key: 'maintainer', value: 'test@example.com' }],
+    });
+    expect(result).toContain('LABEL maintainer=test@example.com');
+  });
+
+  it('should include volume when provided', () => {
+    const result = nodeTemplate({ ...baseCfg, volume: '/data' });
+    expect(result).toContain('VOLUME /data');
+  });
+
+  it('should use cfg.port in fastapi CMD', () => {
+    const result = fastapiTemplate({ ...baseCfg, port: '9000' });
+    expect(result).toContain('--port 9000');
+  });
+
+  it('should use cfg.port in laravel CMD', () => {
+    const result = laravelTemplate({ ...baseCfg, port: '9000' });
+    expect(result).toContain('--port=9000');
   });
 });

@@ -35,6 +35,8 @@ describe('generator', () => {
     expect(cfg.healthcheck).toBe(false);
     expect(cfg.workDir).toBe('/app');
     expect(cfg.envVars).toEqual([]);
+    expect(cfg.labels).toEqual([]);
+    expect(cfg.volume).toBe('');
   });
 
   it('should override defaults with provided config', () => {
@@ -42,6 +44,13 @@ describe('generator', () => {
     expect(cfg.language).toBe('python');
     expect(cfg.port).toBe('8000');
     expect(cfg.multiStage).toBe(true);
+  });
+
+  it('should have defaultPort for every language', () => {
+    for (const [, lang] of Object.entries(LANGUAGES)) {
+      expect(lang.defaultPort).toBeTruthy();
+      expect(typeof lang.defaultPort).toBe('string');
+    }
   });
 
   it('should generate Dockerfile for each language', () => {
@@ -59,7 +68,10 @@ describe('generator', () => {
   });
 
   it('should respect custom base image', () => {
-    const result = generateDockerfile({ language: 'node', baseImage: 'registry.example.com/my-node:1.2.3' });
+    const result = generateDockerfile({
+      language: 'node',
+      baseImage: 'registry.example.com/my-node:1.2.3',
+    });
     expect(result).toContain('FROM registry.example.com/my-node:1.2.3');
   });
 

@@ -18,7 +18,7 @@ export function rustTemplate(cfg) {
     lines.push('RUN touch src/main.rs && cargo build --release');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${cfg.baseImage || (cfg.alpine ? 'alpine:latest' : 'debian:bookworm-slim')}`);
+    lines.push(`FROM ${cfg.alpine ? 'alpine:latest' : 'debian:bookworm-slim'}`);
     if (cfg.alpine) {
       lines.push('RUN apk add --no-cache ca-certificates');
     }

@@ -5,7 +5,9 @@ export function reactTemplate(cfg) {
 
   if (cfg.multiStage) {
     lines.push('# Build stage');
-    lines.push(`FROM ${buildBaseImage('node', cfg.alpine ? 'alpine' : '', cfg.baseImage)} AS builder`);
+    lines.push(
+      `FROM ${buildBaseImage('node', cfg.alpine ? 'alpine' : '', cfg.baseImage)} AS builder`,
+    );
     lines.push('WORKDIR /app');
     lines.push('');
     lines.push('COPY package*.json ./');

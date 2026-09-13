@@ -42,7 +42,8 @@ class ConfigPanel extends HTMLElement {
       this._config.language = e.target.value;
       this._config.baseImage = '';
       this._config.startCmd = '';
-      this._config.port = '';
+      const portInput = this.querySelector('#port');
+      portInput.placeholder = LANGUAGES[e.target.value].defaultPort;
       this._sync();
     });
 
@@ -233,7 +234,7 @@ class ConfigPanel extends HTMLElement {
           <div class="panel-section-title">Configuration</div>
           <div class="form-group">
             <label class="form-label" for="port">Exposed Port</label>
-            <input type="text" id="port" class="form-input" placeholder="e.g., 3000">
+            <input type="text" id="port" class="form-input" placeholder="${LANGUAGES[this._config.language].defaultPort}">
           </div>
           <div class="form-group">
             <label class="form-label" for="work-dir">Working Directory</label>

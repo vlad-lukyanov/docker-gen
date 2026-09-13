@@ -69,7 +69,7 @@ export function laravelTemplate(cfg) {
     lines.push('USER appuser');
   }
 
-  const cmd = cfg.startCmd || 'php artisan serve --host=0.0.0.0 --port=8000';
+  const cmd = cfg.startCmd || 'php artisan serve --host=0.0.0.0 --port=' + (cfg.port || '8000');
   lines.push('');
   lines.push('CMD [' + JSON.stringify(cmd) + ']');
 

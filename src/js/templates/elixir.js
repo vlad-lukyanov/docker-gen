@@ -50,7 +50,9 @@ export function elixirTemplate(cfg) {
 
   if (cfg.multiStage) {
     lines.push('');
-    lines.push('COPY --from=builder /app/_build/prod/rel/app/releases/0.1.0/app.tar.gz /tmp/app.tar.gz');
+    lines.push(
+      'COPY --from=builder /app/_build/prod/rel/app/releases/0.1.0/app.tar.gz /tmp/app.tar.gz',
+    );
     lines.push('RUN tar -xzf /tmp/app.tar.gz -C /opt && rm -f /tmp/app.tar.gz');
   } else {
     lines.push('');

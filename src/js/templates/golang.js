@@ -16,7 +16,7 @@ export function golangTemplate(cfg) {
     lines.push('RUN CGO_ENABLED=0 GOOS=linux go build -o /app/server .');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${cfg.baseImage || (cfg.alpine ? 'alpine:latest' : 'gcr.io/distroless/static-debian12')}`);
+    lines.push(`FROM ${cfg.alpine ? 'alpine:latest' : 'gcr.io/distroless/static-debian12'}`);
     lines.push('');
     lines.push('WORKDIR ' + cfg.workDir);
   } else {
@@ -39,11 +39,6 @@ export function golangTemplate(cfg) {
     lines.push('');
     lines.push(volumeBlock(cfg.volume));
   }
-  
-  if (cfg.nonRoot) {
-    lines.push('');
-    lines.push('RUN addgroup -S appgroup && adduser -S appuser -G appgroup');
-  }
 
   if (cfg.multiStage) {
     lines.push('');
@@ -51,10 +46,8 @@ export function golangTemplate(cfg) {
   } else {
     lines.push('');
     lines.push('COPY . .');
-    if (!cfg.multiStage) {
-      lines.push('');
-      lines.push('RUN go build -o server .');
-    }
+    lines.push('');
+    lines.push('RUN go build -o server .');
   }
 
   if (cfg.port) {
@@ -65,11 +58,6 @@ export function golangTemplate(cfg) {
   if (cfg.healthcheck) {
     lines.push('');
     lines.push(healthcheck(cfg.port || '8080', '/'));
-  }
-
-  if (cfg.nonRoot) {
-    lines.push('');
-    lines.push('USER appuser');
   }
 
   const cmd = cfg.startCmd || './server';

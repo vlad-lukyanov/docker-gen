@@ -13,7 +13,9 @@ export function denoTemplate(cfg) {
     lines.push('RUN deno cache app.ts');
     lines.push('');
     lines.push('# Production stage');
-    lines.push(`FROM ${cfg.baseImage || (cfg.alpine ? 'denoland/deno:alpine' : 'denoland/deno:latest')}`);
+    lines.push(
+      `FROM ${cfg.baseImage || (cfg.alpine ? 'denoland/deno:alpine' : 'denoland/deno:latest')}`,
+    );
   } else {
     lines.push(`FROM ${buildBaseImage('denoland/deno', tag, cfg.baseImage)}`);
   }

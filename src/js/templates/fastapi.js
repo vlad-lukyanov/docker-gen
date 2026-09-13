@@ -66,7 +66,7 @@ export function fastapiTemplate(cfg) {
     lines.push('USER appuser');
   }
 
-  const cmd = cfg.startCmd || 'uvicorn main:app --host 0.0.0.0 --port 8000';
+  const cmd = cfg.startCmd || 'uvicorn main:app --host 0.0.0.0 --port ' + (cfg.port || '8000');
   lines.push('');
   lines.push('CMD [' + JSON.stringify(cmd) + ']');
 
