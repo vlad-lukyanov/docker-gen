@@ -1,4 +1,11 @@
-import { buildBaseImage, envBlock, healthcheck, labelBlock, volumeBlock } from './helpers.js';
+import {
+  buildBaseImage,
+  envBlock,
+  healthcheck,
+  labelBlock,
+  volumeBlock,
+  entrypointBlock,
+} from './helpers.js';
 
 export function golangTemplate(cfg) {
   const lines = [];
@@ -60,9 +67,8 @@ export function golangTemplate(cfg) {
     lines.push(healthcheck(cfg.port || '8080', '/'));
   }
 
-  const cmd = cfg.startCmd || './server';
   lines.push('');
-  lines.push('CMD [' + JSON.stringify(cmd) + ']');
+  lines.push(entrypointBlock(cfg.entrypoint, cfg.startCmd, './server'));
 
   return lines.join('\n');
 }

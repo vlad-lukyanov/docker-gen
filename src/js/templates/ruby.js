@@ -1,4 +1,11 @@
-import { buildBaseImage, envBlock, healthcheck, labelBlock, volumeBlock } from './helpers.js';
+import {
+  buildBaseImage,
+  envBlock,
+  healthcheck,
+  labelBlock,
+  volumeBlock,
+  entrypointBlock,
+} from './helpers.js';
 
 export function rubyTemplate(cfg) {
   const lines = [];
@@ -70,9 +77,8 @@ export function rubyTemplate(cfg) {
     lines.push('USER appuser');
   }
 
-  const cmd = cfg.startCmd || 'bundle exec rails server -b 0.0.0.0';
   lines.push('');
-  lines.push('CMD [' + JSON.stringify(cmd) + ']');
+  lines.push(entrypointBlock(cfg.entrypoint, cfg.startCmd, 'bundle exec rails server -b 0.0.0.0'));
 
   return lines.join('\n');
 }

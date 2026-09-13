@@ -1,4 +1,11 @@
-import { buildBaseImage, envBlock, healthcheck, labelBlock, volumeBlock } from './helpers.js';
+import {
+  buildBaseImage,
+  envBlock,
+  healthcheck,
+  labelBlock,
+  volumeBlock,
+  entrypointBlock,
+} from './helpers.js';
 
 export function fastapiTemplate(cfg) {
   const lines = [];
@@ -66,9 +73,14 @@ export function fastapiTemplate(cfg) {
     lines.push('USER appuser');
   }
 
-  const cmd = cfg.startCmd || 'uvicorn main:app --host 0.0.0.0 --port ' + (cfg.port || '8000');
   lines.push('');
-  lines.push('CMD [' + JSON.stringify(cmd) + ']');
+  lines.push(
+    entrypointBlock(
+      cfg.entrypoint,
+      cfg.startCmd,
+      'uvicorn main:app --host 0.0.0.0 --port ' + (cfg.port || '8000'),
+    ),
+  );
 
   return lines.join('\n');
 }

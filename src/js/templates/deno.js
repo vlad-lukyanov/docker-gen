@@ -1,4 +1,11 @@
-import { buildBaseImage, envBlock, healthcheck, labelBlock, volumeBlock } from './helpers.js';
+import {
+  buildBaseImage,
+  envBlock,
+  healthcheck,
+  labelBlock,
+  volumeBlock,
+  entrypointBlock,
+} from './helpers.js';
 
 export function denoTemplate(cfg) {
   const lines = [];
@@ -70,9 +77,10 @@ export function denoTemplate(cfg) {
     lines.push('USER appuser');
   }
 
-  const cmd = cfg.startCmd || 'deno run --allow-net --allow-env app.ts';
   lines.push('');
-  lines.push('CMD [' + JSON.stringify(cmd) + ']');
+  lines.push(
+    entrypointBlock(cfg.entrypoint, cfg.startCmd, 'deno run --allow-net --allow-env app.ts'),
+  );
 
   return lines.join('\n');
 }

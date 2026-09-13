@@ -1,4 +1,11 @@
-import { buildBaseImage, envBlock, healthcheck, labelBlock, volumeBlock } from './helpers.js';
+import {
+  buildBaseImage,
+  envBlock,
+  healthcheck,
+  labelBlock,
+  volumeBlock,
+  entrypointBlock,
+} from './helpers.js';
 
 export function phpTemplate(cfg) {
   const lines = [];
@@ -56,9 +63,8 @@ export function phpTemplate(cfg) {
     lines.push('USER appuser');
   }
 
-  const cmd = cfg.startCmd || 'php -S 0.0.0.0:' + (cfg.port || '80');
   lines.push('');
-  lines.push('CMD [' + JSON.stringify(cmd) + ']');
+  lines.push(entrypointBlock(cfg.entrypoint, cfg.startCmd, 'php -S 0.0.0.0:' + (cfg.port || '80')));
 
   return lines.join('\n');
 }

@@ -1,4 +1,11 @@
-import { buildBaseImage, envBlock, healthcheck, labelBlock, volumeBlock } from './helpers.js';
+import {
+  buildBaseImage,
+  envBlock,
+  healthcheck,
+  labelBlock,
+  volumeBlock,
+  entrypointBlock,
+} from './helpers.js';
 
 export function kotlinTemplate(cfg) {
   const lines = [];
@@ -72,9 +79,8 @@ export function kotlinTemplate(cfg) {
     lines.push('USER appuser');
   }
 
-  const cmd = cfg.startCmd || 'java -jar app.jar';
   lines.push('');
-  lines.push('CMD [' + JSON.stringify(cmd) + ']');
+  lines.push(entrypointBlock(cfg.entrypoint, cfg.startCmd, 'java -jar app.jar'));
 
   return lines.join('\n');
 }

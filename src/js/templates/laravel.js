@@ -1,4 +1,11 @@
-import { buildBaseImage, envBlock, healthcheck, labelBlock, volumeBlock } from './helpers.js';
+import {
+  buildBaseImage,
+  envBlock,
+  healthcheck,
+  labelBlock,
+  volumeBlock,
+  entrypointBlock,
+} from './helpers.js';
 
 export function laravelTemplate(cfg) {
   const lines = [];
@@ -69,9 +76,14 @@ export function laravelTemplate(cfg) {
     lines.push('USER appuser');
   }
 
-  const cmd = cfg.startCmd || 'php artisan serve --host=0.0.0.0 --port=' + (cfg.port || '8000');
   lines.push('');
-  lines.push('CMD [' + JSON.stringify(cmd) + ']');
+  lines.push(
+    entrypointBlock(
+      cfg.entrypoint,
+      cfg.startCmd,
+      'php artisan serve --host=0.0.0.0 --port=' + (cfg.port || '8000'),
+    ),
+  );
 
   return lines.join('\n');
 }

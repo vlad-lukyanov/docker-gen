@@ -1,4 +1,11 @@
-import { buildBaseImage, envBlock, healthcheck, labelBlock, volumeBlock } from './helpers.js';
+import {
+  buildBaseImage,
+  envBlock,
+  healthcheck,
+  labelBlock,
+  volumeBlock,
+  entrypointBlock,
+} from './helpers.js';
 
 export function reactTemplate(cfg) {
   const lines = [];
@@ -58,9 +65,8 @@ export function reactTemplate(cfg) {
     lines.push(healthcheck(cfg.port || '80', '/'));
   }
 
-  const cmd = cfg.startCmd || 'nginx -g "daemon off;"';
   lines.push('');
-  lines.push('CMD [' + JSON.stringify(cmd) + ']');
+  lines.push(entrypointBlock(cfg.entrypoint, cfg.startCmd, 'nginx -g "daemon off;"'));
 
   return lines.join('\n');
 }

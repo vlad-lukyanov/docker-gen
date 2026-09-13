@@ -41,3 +41,19 @@ export function healthcheck(port, path) {
     `  CMD curl -f http://localhost:${port}${path} || exit 1`,
   ].join('\n');
 }
+
+export function entrypointBlock(entrypoint, startCmd, defaultCmd) {
+  const lines = [];
+
+  if (entrypoint) {
+    lines.push('ENTRYPOINT [' + JSON.stringify(entrypoint) + ']');
+    if (startCmd) {
+      lines.push('CMD [' + JSON.stringify(startCmd) + ']');
+    }
+  } else {
+    const cmd = startCmd || defaultCmd;
+    lines.push('CMD [' + JSON.stringify(cmd) + ']');
+  }
+
+  return lines.join('\n');
+}

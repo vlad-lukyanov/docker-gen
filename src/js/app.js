@@ -67,6 +67,11 @@ class ConfigPanel extends HTMLElement {
       this._sync();
     });
 
+    this.querySelector('#entrypoint').addEventListener('input', (e) => {
+      this._config.entrypoint = e.target.value;
+      this._sync();
+    });
+
     this.querySelector('#volume').addEventListener('input', (e) => {
       this._config.volume = e.target.value;
       this._sync();
@@ -241,8 +246,12 @@ class ConfigPanel extends HTMLElement {
             <input type="text" id="work-dir" class="form-input" value="/app">
           </div>
           <div class="form-group">
-            <label class="form-label" for="start-cmd">Start Command</label>
+            <label class="form-label" for="start-cmd">Start Command (CMD)</label>
             <input type="text" id="start-cmd" class="form-input" placeholder="Auto-detect">
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="entrypoint">Entrypoint</label>
+            <input type="text" id="entrypoint" class="form-input" placeholder="e.g., /docker-entrypoint.sh">
           </div>
           <div class="form-group">
             <label class="form-label" for="volume">Volume</label>

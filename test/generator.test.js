@@ -37,6 +37,7 @@ describe('generator', () => {
     expect(cfg.envVars).toEqual([]);
     expect(cfg.labels).toEqual([]);
     expect(cfg.volume).toBe('');
+    expect(cfg.entrypoint).toBe('');
   });
 
   it('should override defaults with provided config', () => {
@@ -163,5 +164,30 @@ describe('generator', () => {
       workDir: '/srv/app',
     });
     expect(result).toContain('WORKDIR /srv/app');
+  });
+
+  it('should include ENTRYPOINT when set', () => {
+    const result = generateDockerfile({
+      language: 'node',
+      entrypoint: '/docker-entrypoint.sh',
+    });
+    expect(result).toContain('ENTRYPOINT ["/docker-entrypoint.sh"]');
+    expect(result).not.toContain('CMD');
+  });
+
+  it('should include ENTRYPOINT and CMD when both set', () => {
+    const result = generateDockerfile({
+      language: 'node',
+      entrypoint: '/docker-entrypoint.sh',
+      startCmd: 'npm start',
+    });
+    expect(result).toContain('ENTRYPOINT ["/docker-entrypoint.sh"]');
+    expect(result).toContain('CMD ["npm start"]');
+  });
+
+  it('should use default CMD when entrypoint and startCmd are empty', () => {
+    const result = generateDockerfile({ language: 'node' });
+    expect(result).toContain('CMD ["node server.js"]');
+    expect(result).not.toContain('ENTRYPOINT');
   });
 });
